@@ -8,6 +8,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text('ShopApp'),
+        actions: [
+          IconButton(icon: Icon(Icons.search, color: Colors.white,), onPressed: (){}),
+          IconButton(icon: Icon(Icons.shopping_cart, color: Colors.white), onPressed: (){}),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(accountName: Text('Name Here'), accountEmail: Text('name@example.com'))
+          ],
+        )
+      ),
+    );
   }
 }
