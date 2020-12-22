@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text('Name Here'),
+              accountName: Text('Name'),
               accountEmail: Text('name@example.com'),
               currentAccountPicture: GestureDetector(
                 child: CircleAvatar(
