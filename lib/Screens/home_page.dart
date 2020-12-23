@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/Components/drawer_list_tile.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,12 +22,13 @@ class _HomePageState extends State<HomePage> {
               ),
               onPressed: () {}),
           IconButton(
-              icon: Icon(Icons.shopping_cart, color: Colors.white),
-              onPressed: () {}),
+            icon: Icon(Icons.shopping_cart, color: Colors.white),
+            onPressed: () {},
+          ),
         ],
       ),
       drawer: Drawer(
-          child: ListView(
+        child: ListView(
           children: [
             UserAccountsDrawerHeader(
               accountName: Text('Name'),
@@ -39,16 +41,87 @@ class _HomePageState extends State<HomePage> {
               ),
               decoration: BoxDecoration(color: Colors.red),
             ),
-            DrawerListTile(label: 'Home Page', icon: Icon(Icons.home, color: Colors.red,), onTap: (){},),
-            DrawerListTile(label: 'My Account', icon: Icon(Icons.person, color: Colors.red,), onTap: (){},),
-            DrawerListTile(label: 'My Orders', icon: Icon(Icons.shopping_basket, color: Colors.red,), onTap: (){},),
-            DrawerListTile(label: 'Categories', icon: Icon(Icons.dashboard, color: Colors.red,), onTap: (){},),
-            DrawerListTile(label: 'Favorites', icon: Icon(Icons.favorite, color: Colors.red,), onTap: (){},),
+            DrawerListTile(
+              label: 'Home Page',
+              icon: Icon(
+                Icons.home,
+                color: Colors.red,
+              ),
+              onTap: () {},
+            ),
+            DrawerListTile(
+              label: 'My Account',
+              icon: Icon(
+                Icons.person,
+                color: Colors.red,
+              ),
+              onTap: () {},
+            ),
+            DrawerListTile(
+              label: 'My Orders',
+              icon: Icon(
+                Icons.shopping_basket,
+                color: Colors.red,
+              ),
+              onTap: () {},
+            ),
+            DrawerListTile(
+              label: 'Categories',
+              icon: Icon(
+                Icons.dashboard,
+                color: Colors.red,
+              ),
+              onTap: () {},
+            ),
+            DrawerListTile(
+              label: 'Favorites',
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ),
+              onTap: () {},
+            ),
             Divider(),
-            DrawerListTile(label: 'Settings', icon: Icon(Icons.settings, color: Colors.grey,), onTap: (){},),
-            DrawerListTile(label: 'Help', icon: Icon(Icons.help, color: Colors.blue,), onTap: (){},),
+            DrawerListTile(
+              label: 'Settings',
+              icon: Icon(
+                Icons.settings,
+                color: Colors.grey,
+              ),
+              onTap: () {},
+            ),
+            DrawerListTile(
+              label: 'Help',
+              icon: Icon(
+                Icons.help,
+                color: Colors.blue,
+              ),
+              onTap: () {},
+            ),
           ],
-      )),
+        ),
+      ),
+      body: SizedBox(
+        height: 200,
+        child: Carousel(
+          boxFit: BoxFit.cover,
+          //autoplay: true,
+          animationCurve: Curves.fastOutSlowIn,
+          animationDuration: Duration(seconds: 1),
+          dotSize: 4.0,
+          dotColor: Colors.red[900],
+          dotIncreasedColor: Colors.red,
+          images: [
+            AssetImage('images/c1.jpg'),
+            AssetImage('images/IMG_1266.JPG'),
+            AssetImage('images/m1.jpeg'),
+            AssetImage('images/m2.jpg'),
+            AssetImage('images/w1.jpeg'),
+            AssetImage('images/w3.jpeg'),
+            AssetImage('images/w4.jpeg'),
+          ],
+        ),
+      )
     );
   }
 }
