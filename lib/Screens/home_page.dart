@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/Components/drawer_list_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:shopapp/Components/horizontal_listview.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -101,27 +102,36 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: SizedBox(
-        height: 200,
-        child: Carousel(
-          boxFit: BoxFit.cover,
-          //autoplay: true,
-          animationCurve: Curves.fastOutSlowIn,
-          animationDuration: Duration(seconds: 1),
-          dotSize: 4.0,
-          dotColor: Colors.red[900],
-          dotIncreasedColor: Colors.red,
-          images: [
-            AssetImage('images/c1.jpg'),
-            AssetImage('images/IMG_1266.JPG'),
-            AssetImage('images/m1.jpeg'),
-            AssetImage('images/m2.jpg'),
-            AssetImage('images/w1.jpeg'),
-            AssetImage('images/w3.jpeg'),
-            AssetImage('images/w4.jpeg'),
-          ],
-        ),
-      )
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 200,
+            child: Carousel(
+              boxFit: BoxFit.cover,
+              autoplay: false,
+              animationCurve: Curves.fastOutSlowIn,
+              animationDuration: Duration(seconds: 1),
+              dotSize: 4.0,
+              dotColor: Colors.red[900],
+              dotIncreasedColor: Colors.red,
+              images: [
+                AssetImage('images/c1.jpg'),
+                AssetImage('images/IMG_1266.JPG'),
+                AssetImage('images/m1.jpeg'),
+                AssetImage('images/m2.jpg'),
+                AssetImage('images/w1.jpeg'),
+                AssetImage('images/w3.jpeg'),
+                AssetImage('images/w4.jpeg'),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Categories'),
+          ),
+          HorizontalList(),
+        ],
+      ),
     );
   }
 }
