@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopapp/listview_category.dart';
+import 'file:///G:/HDD/FlutterProjects/shopapp/lib/Components/listview_category.dart';
 
 class HorizontalList extends StatelessWidget {
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopapp/Components/drawer_list_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:shopapp/Components/horizontal_listview.dart';
+import 'package:shopapp/Components/product_grid.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -130,6 +131,12 @@ class _HomePageState extends State<HomePage> {
             child: Text('Categories'),
           ),
           HorizontalList(),
+          Divider(),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Recent Products'),
+          ),
+          ProductGrid(),
         ],
       ),
     );
