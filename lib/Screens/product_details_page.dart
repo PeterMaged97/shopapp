@@ -84,7 +84,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 textColor: Colors.white,
                 elevation: 2.0,
                 child: Center(
-                  child: Text('Buy Now'),
+                  child: Row(
+                    children: [
+                      Expanded(child: Center(child: Text('Buy Now')), flex: 8,),
+                      Expanded(child: IconButton(icon: Icon(Icons.add_shopping_cart), onPressed: (){}), flex: 1,),
+                      Expanded(child: IconButton(icon: Icon(Icons.favorite_border), onPressed: (){}), flex: 1)
+                    ],
+                  ),
                 ),
               ),
             )
