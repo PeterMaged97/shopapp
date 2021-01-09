@@ -14,7 +14,15 @@ class OrderDetailsButton extends StatelessWidget {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0.0)),
-        onPressed: () {},
+        onPressed: () {
+          showDialog(context: context, builder: (context){
+            return AlertDialog(title: Text(label),
+            actions: [MaterialButton(
+                onPressed: (){Navigator.of(context).pop();},
+                child: Text('Close'),
+              )],);
+          });
+        },
         color: color,
         textColor: Colors.white,
         elevation: 2.0,

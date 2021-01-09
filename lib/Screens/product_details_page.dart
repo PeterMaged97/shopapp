@@ -83,18 +83,47 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 color: Colors.red,
                 textColor: Colors.white,
                 elevation: 2.0,
-                child: Center(
-                  child: Row(
-                    children: [
-                      Expanded(child: Center(child: Text('Buy Now')), flex: 8,),
-                      Expanded(child: IconButton(icon: Icon(Icons.add_shopping_cart), onPressed: (){}), flex: 1,),
-                      Expanded(child: IconButton(icon: Icon(Icons.favorite_border), onPressed: (){}), flex: 1)
-                    ],
+                child: Container(
+                  height:30,
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Expanded(child: Center(child: Text('Buy Now')), flex: 8,),
+                        Expanded(child: IconButton(icon: Icon(Icons.add_shopping_cart), onPressed: (){}), flex: 1,),
+                        Expanded(child: IconButton(icon: Icon(Icons.favorite_border), onPressed: (){}), flex: 1)
+                      ],
+                    ),
                   ),
                 ),
               ),
-            )
-          ],)
+            ),
+          ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: ListTile(
+              title: Text('Product Details'),
+              subtitle: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Felis bibendum ut tristique et egestas. Id aliquet risus feugiat in ante metus dictum. Commodo viverra maecenas accumsan lacus vel facilisis volutpat. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Nisl tincidunt eget nullam non nisi. Bibendum arcu vitae elementum curabitur vitae nunc sed. Interdum varius sit amet mattis. Et molestie ac feugiat sed lectus vestibulum mattis. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus.'),
+            ),
+          ),
+          Divider(thickness: 1,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                children: [
+                  Text('Product Name: ', style: TextStyle(color: Colors.grey),),
+                  Text(widget.productName,),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Product Condition: ', style: TextStyle(color: Colors.grey),),
+                  Text('NEW',),
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );
