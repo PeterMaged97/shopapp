@@ -6,8 +6,9 @@ class Product extends StatelessWidget {
   final String image;
   final int oldPrice;
   final int price;
+  final int levelCounter;
 
-  Product({this.name, this.image, this.oldPrice, this.price});
+  Product({this.levelCounter, this.name, this.image, this.oldPrice, this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class Product extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProductDetailsPage(
+            levelCounter: levelCounter+1,
             productName: name,
             productPicture: image,
             productOldPrice: oldPrice,
@@ -22,7 +24,7 @@ class Product extends StatelessWidget {
           )));
         },
         child: GridTile(
-          child: Hero(tag: name, child: Image.asset(image, fit: BoxFit.cover)),
+          child: Hero(tag: '$name$levelCounter', child: Image.asset(image, fit: BoxFit.cover)),
           footer: Container(
             alignment: Alignment.center,
             height:30,

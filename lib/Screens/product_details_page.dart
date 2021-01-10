@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/Components/order_details_button.dart';
+import 'package:shopapp/Components/product_grid.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final String productName;
   final String productPicture;
   final int productOldPrice;
   final int productNewPrice;
+  final int levelCounter;
 
   ProductDetailsPage(
-      {this.productName,
+      {this.levelCounter,
+      this.productName,
       this.productPicture,
       this.productOldPrice,
       this.productNewPrice});
@@ -23,7 +26,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text('ShopApp'),
+        title: InkWell(
+          child: Text('ShopApp'),
+          onTap: () {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+          },
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
               icon: Icon(
@@ -44,7 +53,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: GridTile(
               child: Container(
                 child: Hero(
-                    tag: widget.productName,
+                    tag: '${widget.productName}${widget.levelCounter-1}',
                     child: Image.asset(widget.productPicture)),
               ),
               footer: Container(
@@ -73,57 +82,88 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             OrderDetailsButton(label: 'Quantity', color: Colors.black),
           ]),
           //--------------Buy Now Button---------------------
-          Row(children: [
-            Expanded(
-              child: MaterialButton(
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0)),
-                onPressed: () {},
-                color: Colors.red,
-                textColor: Colors.white,
-                elevation: 2.0,
-                child: Container(
-                  height:30,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Expanded(child: Center(child: Text('Buy Now')), flex: 8,),
-                        Expanded(child: IconButton(icon: Icon(Icons.add_shopping_cart), onPressed: (){}), flex: 1,),
-                        Expanded(child: IconButton(icon: Icon(Icons.favorite_border), onPressed: (){}), flex: 1)
-                      ],
+          Row(
+            children: [
+              Expanded(
+                child: MaterialButton(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0)),
+                  onPressed: () {},
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  elevation: 2.0,
+                  child: Container(
+                    height: 30,
+                    child: Center(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(child: Text('Buy Now')),
+                            flex: 8,
+                          ),
+                          Expanded(
+                            child: IconButton(
+                                icon: Icon(Icons.add_shopping_cart),
+                                onPressed: () {}),
+                            flex: 1,
+                          ),
+                          Expanded(
+                              child: IconButton(
+                                  icon: Icon(Icons.favorite_border),
+                                  onPressed: () {}),
+                              flex: 1)
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: ListTile(
               title: Text('Product Details'),
-              subtitle: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Felis bibendum ut tristique et egestas. Id aliquet risus feugiat in ante metus dictum. Commodo viverra maecenas accumsan lacus vel facilisis volutpat. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Nisl tincidunt eget nullam non nisi. Bibendum arcu vitae elementum curabitur vitae nunc sed. Interdum varius sit amet mattis. Et molestie ac feugiat sed lectus vestibulum mattis. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus.'),
+              subtitle: Text(
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Felis bibendum ut tristique et egestas. Id aliquet risus feugiat in ante metus dictum. Commodo viverra maecenas accumsan lacus vel facilisis volutpat. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Nisl tincidunt eget nullam non nisi. Bibendum arcu vitae elementum curabitur vitae nunc sed. Interdum varius sit amet mattis. Et molestie ac feugiat sed lectus vestibulum mattis. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus.'),
             ),
           ),
-          Divider(thickness: 1,),
+          Divider(
+            thickness: 1,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
                 children: [
-                  Text('Product Name: ', style: TextStyle(color: Colors.grey),),
-                  Text(widget.productName,),
+                  Text(
+                    'Product Name: ',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(
+                    widget.productName,
+                  ),
                 ],
               ),
               Row(
                 children: [
-                  Text('Product Condition: ', style: TextStyle(color: Colors.grey),),
-                  Text('NEW',),
+                  Text(
+                    'Product Condition: ',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(
+                    'NEW',
+                  ),
                 ],
               ),
             ],
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Similar Products'),
+          ),
+          ProductGrid(widget.levelCounter),
         ],
       ),
     );

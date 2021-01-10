@@ -10,12 +10,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  int levelCounter = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
         title: Text('ShopApp'),
+        centerTitle: true,
         actions: [
           IconButton(
               icon: Icon(
@@ -136,7 +140,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.all(8.0),
             child: Text('Recent Products'),
           ),
-          ProductGrid(),
+          ProductGrid(levelCounter),
         ],
       ),
     );
