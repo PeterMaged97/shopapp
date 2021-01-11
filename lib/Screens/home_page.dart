@@ -3,6 +3,7 @@ import 'package:shopapp/Components/drawer_list_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:shopapp/Components/horizontal_listview.dart';
 import 'package:shopapp/Components/product_grid.dart';
+import 'package:shopapp/Screens/cart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,7 +30,9 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {}),
           IconButton(
             icon: Icon(Icons.shopping_cart, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+            },
           ),
         ],
       ),
@@ -69,7 +72,9 @@ class _HomePageState extends State<HomePage> {
                 Icons.shopping_basket,
                 color: Colors.red,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+              },
             ),
             DrawerListTile(
               label: 'Categories',
