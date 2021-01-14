@@ -86,7 +86,7 @@ class SingleCartItem extends StatelessWidget {
             Expanded(
                 child: Container(
               child: Image.asset(image),
-              width: 112,
+              width: 100,
             )),
             Expanded(
               flex: 5,
@@ -121,10 +121,15 @@ class SingleCartItem extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    alignment: Alignment.bottomRight,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('${qty.toString()} x \$${price.toString()}',),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('${qty.toString()} x ',),
+                          Text('\$${price.toString()}', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),)
+                        ],
+                      ),
                     ),
                   )
                 ],
