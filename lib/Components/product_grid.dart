@@ -84,7 +84,7 @@ class _ProductGridState extends State<ProductGrid> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics: ScrollPhysics(),
+      //physics: ScrollPhysics(),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemCount: productList.length,

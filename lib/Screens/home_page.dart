@@ -112,11 +112,12 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
           SizedBox(
-            height: 200,
+            height:200,
             child: Carousel(
+              dotBgColor: Colors.transparent,
               boxFit: BoxFit.cover,
               autoplay: false,
               animationCurve: Curves.fastOutSlowIn,
@@ -145,7 +146,8 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.all(8.0),
             child: Text('Recent Products'),
           ),
-          ProductGrid(levelCounter),
+          Flexible(flex: 3,
+              child: ProductGrid(levelCounter)),
         ],
       ),
     );

@@ -84,9 +84,10 @@ class SingleCartItem extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
+              flex: 2,
                 child: Container(
+                  padding: EdgeInsets.only(left: 10),
               child: Image.asset(image),
-              width: 100,
             )),
             Expanded(
               flex: 5,
