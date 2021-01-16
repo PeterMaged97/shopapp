@@ -15,7 +15,7 @@ class ListViewCategory extends StatelessWidget {
         child: Container(
           child: Column(
             children: [
-              Image.asset(imageLocation),
+              Image.asset(imageLocation, height: 80,),
               Text(
                 imageCaption,
                 style: TextStyle(color: Colors.red[900]),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "671545054144",
+    "project_id": "shopapp-1eebe",
+    "storage_bucket": "shopapp-1eebe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671545054144:android:cffb86023915cf93ca6e25",
+        "android_client_info": {
+          "package_name": "com.petermaged.shopapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671545054144-6144onicaqqmbbcrtb45qrivqcdr511g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petermaged.shopapp",
+            "certificate_hash": "4edb39be25e0021d4d90285798e3f1699cb195bc"
+          }
+        },
+        {
+          "client_id": "671545054144-buiauv8knil4kfr2g8rjiusm4vdm27pp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFGxNlKxGs6T4rI1aAAsoOt-TjOP2JbCk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671545054144-buiauv8knil4kfr2g8rjiusm4vdm27pp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
