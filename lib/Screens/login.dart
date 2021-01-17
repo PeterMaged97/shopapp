@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isSignedId();
+    isSignedIn();
   }
 
   @override
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: <Widget>[
           Visibility(
-              visible: loading ?? true,
+              visible: loading,
               child: Center(
                 child: Container(
                   alignment: Alignment.center,
@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void isSignedId() async {
+  void isSignedIn() async {
     setState(() {
       loading = true;
     });
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (isLoggedIn) {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn)));
     }
     setState(() {
       loading = false;
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       Fluttertoast.showToast(msg: 'Welcome ${user.displayName}');
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn)));
     } else {
       Fluttertoast.showToast(msg: "Login failed");
     }
