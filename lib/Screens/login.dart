@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,8 +14,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GlobalKey _formKey = GlobalKey<FormState>();
+  TextEditingController _emailEditingController = TextEditingController();
+  TextEditingController _passwordEditingController = TextEditingController();
   SharedPreferences preferences;
   bool loading = false;
   bool isLoggedIn = false;
@@ -28,43 +33,140 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: new Text(
-          "Login",
-          style: TextStyle(color: Colors.red.shade900),
-        ),
-      ),
       body: Stack(
         children: <Widget>[
-          Visibility(
-              visible: loading,
-              child: Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  color: Colors.white.withOpacity(0.9),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+          Container(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage('images/back.jpg'),
+              fit: BoxFit.cover,
+            )),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(height: 100,),
+              Container(
+                //alignment: Alignment.center,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.white,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Email',
+                              icon: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Icon(Icons.email),
+                              ),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _emailEditingController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Enter your email address';
+                              } else {
+                                Pattern pattern =
+                                    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                    r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                    r"{0,253}[a-zA-Z0-9])?)*$";
+                                RegExp regex = new RegExp(pattern);
+                                if (!regex.hasMatch(value))
+                                  return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.white,
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Password',
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(Icons.lock),
+                                )),
+                            controller: _passwordEditingController,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'You must enter a password';
+                              } else if (value.length < 6) {
+                                return 'Your password must be at least 6 characters long';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.blue,
+                          child: MaterialButton(onPressed: (){},
+                          textColor: Colors.white,
+                            minWidth: double.infinity,
+                          child: Text('Login'),),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ))
+              ),
+              Container(
+                //alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    Divider(color: Colors.white,),
+                    Text('Other login options', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(15.0),
+                        color: Colors.red,
+                        child: MaterialButton(onPressed: signInWithGoogle,
+                          textColor: Colors.white,
+                          minWidth: double.infinity,
+                          child: Text('Google'),),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Visibility(
+            visible: loading,
+            child: Center(
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors.white.withOpacity(0.9),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                ),
+              ),
+            ),
+          )
         ],
-      ),
-      bottomNavigationBar: Container(
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 12.0, right: 12.0, top: 8.0, bottom: 8.0),
-          child: FlatButton(
-              color: Colors.red,
-              onPressed: () {
-                signInWithGoogle();
-              },
-              child: Text(
-                "Sign in / Sign up with google",
-                style: TextStyle(color: Colors.white),
-              )),
-        ),
       ),
     );
   }
@@ -75,11 +177,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     preferences = await SharedPreferences.getInstance();
-    isLoggedIn = await googleSignIn.isSignedIn();
+    isLoggedIn = await _googleSignIn.isSignedIn();
 
     if (isLoggedIn) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn)));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
     }
     setState(() {
       loading = false;
@@ -87,20 +189,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signInWithGoogle() async {
-
     setState(() {
       loading = true;
     });
 
     preferences = await SharedPreferences.getInstance();
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
     final UserCredential authResult =
-        await firebaseAuth.signInWithCredential(credential);
+        await _firebaseAuth.signInWithCredential(credential);
     final User user = authResult.user;
 
     if (user != null) {
@@ -125,8 +226,8 @@ class _LoginScreenState extends State<LoginScreen> {
             'profile_picture', documents[0]['profile_picture']);
       }
       Fluttertoast.showToast(msg: 'Welcome ${user.displayName}');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn)));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
     } else {
       Fluttertoast.showToast(msg: "Login failed");
     }
