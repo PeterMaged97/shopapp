@@ -7,28 +7,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/Screens/home_page.dart';
-import 'package:shopapp/Screens/signup.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _emailEditingController = TextEditingController();
   TextEditingController _passwordEditingController = TextEditingController();
+  TextEditingController _confirmPasswordEditingController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
   SharedPreferences preferences;
   bool loading = false;
   bool isLoggedIn = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    isSignedIn();
   }
 
   @override
@@ -48,28 +47,29 @@ class _LoginScreenState extends State<LoginScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                image: AssetImage('images/back.jpg'),
-                fit: BoxFit.cover,
-              )),
+                    image: AssetImage('images/back.jpg'),
+                    fit: BoxFit.cover,
+                  )),
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(
-                child: Hero(
-                  tag: 'logo',
-                  child: Container(
-                    //alignment: Alignment.topCenter,
-                    child: Image.asset(
-                      'images/lg.png',
-                      //width: 250,
-                      height: 100,
-                      fit: BoxFit.cover
+                Flexible(
+                  child: Hero(
+                    tag: 'logo',
+                    child: Container(
+                      //alignment: Alignment.topCenter,
+                      child: Image.asset(
+                          'images/lg.png',
+                          //width: 250,
+                          height: 100,
+                          fit: BoxFit.cover
+                      ),
                     ),
                   ),
                 ),
-              ),
+
               //SizedBox(height: 100,),
               Container(
                 //alignment: Alignment.center,
@@ -80,7 +80,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white.withOpacity(0.70),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Name',
+                              icon: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Icon(Icons.person),
+                              ),
+                            ),
+                            controller: _nameController,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white.withOpacity(0.70),
                           child: TextFormField(
                             decoration: InputDecoration(
@@ -113,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           color: Colors.white.withOpacity(0.70),
                           child: TextFormField(
                             decoration: InputDecoration(
@@ -138,47 +156,41 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.blue[800],
-                          child: MaterialButton(onPressed: (){},
-                          textColor: Colors.white,
-                          minWidth: double.infinity,
-                          child: Text('Login'),),
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white.withOpacity(0.70),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Confirm Password',
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(Icons.lock),
+                                )),
+                            controller: _confirmPasswordEditingController,
+                            validator: (value) {
+                              if(value != _passwordEditingController.text){
+                                return 'Password does\'t match';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                       ),
-                      SizedBox(height: 30,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        Text('Don\'t have an account?', style: TextStyle(fontSize: 16, color: Colors.white),),
-                        InkWell(child: Text(' Sign up here', style: TextStyle(fontSize: 16, color: Colors.red),),
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
-                        },)
-                      ],)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.blue[800],
+                          child: MaterialButton(onPressed: (){
+                            Navigator.pop(context);
+                          },
+                            textColor: Colors.white,
+                            minWidth: double.infinity,
+                            child: Text('Register'),),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-              Container(
-                //alignment: Alignment.bottomCenter,
-                child: Column(
-                  children: [
-                    Divider(color: Colors.white,),
-                    Text('Other login options', style: TextStyle(color: Colors.white, fontSize: 16)),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.red,
-                        child: MaterialButton(
-                          onPressed: signInWithGoogle,
-                          textColor: Colors.white,
-                          minWidth: double.infinity,
-                          child: Text('Google'),),
-                      ),
-                    )
-                  ],
                 ),
               ),
             ],
@@ -198,70 +210,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
-  }
-
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-
-    preferences = await SharedPreferences.getInstance();
-    isLoggedIn = await _googleSignIn.isSignedIn();
-
-    if (isLoggedIn) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
-    }
-    setState(() {
-      loading = false;
-    });
-  }
-
-  Future signInWithGoogle() async {
-    setState(() {
-      loading = true;
-    });
-
-    preferences = await SharedPreferences.getInstance();
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final UserCredential authResult =
-        await _firebaseAuth.signInWithCredential(credential);
-    final User user = authResult.user;
-
-    if (user != null) {
-      final QuerySnapshot result = await FirebaseFirestore.instance
-          .collection('users')
-          .where('id', isEqualTo: user.uid)
-          .get();
-      final List<DocumentSnapshot> documents = result.docs;
-      if (documents.length == 0) {
-        FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'id': user.uid,
-          'username': user.displayName,
-          'profile_picture': user.photoURL,
-        });
-        await preferences.setString('id', user.uid);
-        await preferences.setString('username', user.displayName);
-        await preferences.setString('profile_picture', user.photoURL);
-      } else {
-        await preferences.setString('id', documents[0]['id']);
-        await preferences.setString('username', documents[0]['username']);
-        await preferences.setString(
-            'profile_picture', documents[0]['profile_picture']);
-      }
-      Fluttertoast.showToast(msg: 'Welcome ${user.displayName}');
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
-    } else {
-      Fluttertoast.showToast(msg: "Login failed");
-    }
-    setState(() {
-      loading = false;
-    });
   }
 }
