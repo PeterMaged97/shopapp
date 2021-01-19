@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.blue[800],
+                          color: Colors.red[800],
                           child: MaterialButton(onPressed: (){},
                           textColor: Colors.white,
                           minWidth: double.infinity,

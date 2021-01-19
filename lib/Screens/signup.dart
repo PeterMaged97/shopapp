@@ -180,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.blue[800],
+                          color: Colors.red[800],
                           child: MaterialButton(onPressed: (){
                             Navigator.pop(context);
                           },

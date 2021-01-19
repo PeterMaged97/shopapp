@@ -14,6 +14,10 @@ class ShopApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.red.shade900,
+          cursorColor: Colors.red.shade900,
+        ),
         routes: {
           '/' : (context) => LoginScreen(),
       },
