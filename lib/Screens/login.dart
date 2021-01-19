@@ -50,9 +50,20 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(height: 100,),
+              Flexible(
+                child: Container(
+                  //alignment: Alignment.topCenter,
+                  child: Image.asset(
+                    'images/lg.png',
+                    //width: 250,
+                    height: 100,
+                    fit: BoxFit.cover
+                  ),
+                ),
+              ),
+              //SizedBox(height: 100,),
               Container(
                 //alignment: Alignment.center,
                 child: Form(
@@ -124,10 +135,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.blue,
                           child: MaterialButton(onPressed: (){},
                           textColor: Colors.white,
-                            minWidth: double.infinity,
+                          minWidth: double.infinity,
                           child: Text('Login'),),
                         ),
-                      )
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                        Text('Don\'t have an account?', style: TextStyle(fontSize: 16, color: Colors.white),),
+                        InkWell(child: Text(' Sign up here', style: TextStyle(fontSize: 16, color: Colors.red),),
+                        onTap: (){},)
+                      ],)
                     ],
                   ),
                 ),
@@ -143,7 +161,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Material(
                         borderRadius: BorderRadius.circular(15.0),
                         color: Colors.red,
-                        child: MaterialButton(onPressed: signInWithGoogle,
+                        child: MaterialButton(
+                          onPressed: signInWithGoogle,
                           textColor: Colors.white,
                           minWidth: double.infinity,
                           child: Text('Google'),),
