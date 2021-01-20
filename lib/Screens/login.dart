@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   SharedPreferences preferences;
   bool loading = false;
   bool isLoggedIn = false;
+  bool showPassword = false;
 
   @override
   void initState() {
@@ -119,11 +120,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Password',
+                                suffixIcon: GestureDetector(child: Icon(Icons.remove_red_eye), onTap: (){
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },),
                                 icon: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Icon(Icons.lock),
                                 )),
                             controller: _passwordEditingController,
+                            obscureText: !showPassword,
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'You must enter a password';
@@ -210,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (isLoggedIn) {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
+          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn,)));
     }
     setState(() {
       loading = false;
@@ -256,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       Fluttertoast.showToast(msg: 'Welcome ${user.displayName}');
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(_googleSignIn)));
+          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn)));
     } else {
       Fluttertoast.showToast(msg: "Login failed");
     }

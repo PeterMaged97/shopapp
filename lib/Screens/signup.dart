@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/Screens/home_page.dart';
+import 'package:shopapp/db/users.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -17,17 +18,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GlobalKey _formKey = GlobalKey<FormState>();
+  UserServices _userServices = UserServices();
   TextEditingController _emailEditingController = TextEditingController();
   TextEditingController _passwordEditingController = TextEditingController();
-  TextEditingController _confirmPasswordEditingController = TextEditingController();
+  TextEditingController _confirmPasswordEditingController =
+      TextEditingController();
   TextEditingController _nameController = TextEditingController();
   SharedPreferences preferences;
   bool loading = false;
   bool isLoggedIn = false;
+  bool showPassword = false;
+  bool showConfirmPassword = false;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> validateForm() async {
+    FormState formState = _formKey.currentState;
+    if (formState.validate()) {
+      print('valid');
+      await registerUser();
+    }
+  }
+
+  Future<void> registerUser() async {
+    User firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) {
+      print('12');
+      _firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: _emailEditingController.text,
+              password: _passwordEditingController.text)
+          .then((firebaseUser) => {
+                _userServices.createUser({
+                  'name': _nameController.text,
+                  'mail': firebaseUser.user.email,
+                  'id': firebaseUser.user.uid,
+                })
+              });
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(firebaseAuth: _firebaseAuth,)));
+    }else{
+      print(firebaseUser.displayName);
+      print(firebaseUser.email);
+    }
   }
 
   @override
@@ -47,28 +82,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('images/back.jpg'),
-                    fit: BoxFit.cover,
-                  )),
+                image: AssetImage('images/back.jpg'),
+                fit: BoxFit.cover,
+              )),
             ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: Container(
-                      //alignment: Alignment.topCenter,
-                      child: Image.asset(
-                          'images/lg.png',
-                          //width: 250,
-                          height: 100,
-                          fit: BoxFit.cover
-                      ),
-                    ),
+              Flexible(
+                child: Hero(
+                  tag: 'logo',
+                  child: Container(
+                    //alignment: Alignment.topCenter,
+                    child: Image.asset('images/lg.png',
+                        //width: 250,
+                        height: 100,
+                        fit: BoxFit.cover),
                   ),
                 ),
+              ),
 
               //SizedBox(height: 100,),
               Container(
@@ -137,11 +170,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Password',
+                                suffixIcon: GestureDetector(
+                                  child: Icon(Icons.remove_red_eye),
+                                  onTap: () {
+                                    setState(() {
+                                      showPassword = !showPassword;
+                                    });
+                                  },
+                                ),
                                 icon: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Icon(Icons.lock),
                                 )),
                             controller: _passwordEditingController,
+                            obscureText: !showPassword,
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'You must enter a password';
@@ -162,13 +204,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Confirm Password',
+                                suffixIcon: GestureDetector(
+                                  child: Icon(Icons.remove_red_eye),
+                                  onTap: () {
+                                    setState(() {
+                                      showConfirmPassword =
+                                          !showConfirmPassword;
+                                    });
+                                  },
+                                ),
                                 icon: Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Icon(Icons.lock),
                                 )),
                             controller: _confirmPasswordEditingController,
+                            obscureText: !showConfirmPassword,
                             validator: (value) {
-                              if(value != _passwordEditingController.text){
+                              if (value != _passwordEditingController.text) {
                                 return 'Password does\'t match';
                               }
                               return null;
@@ -181,12 +233,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: Material(
                           borderRadius: BorderRadius.circular(15.0),
                           color: Colors.red[800],
-                          child: MaterialButton(onPressed: (){
-                            Navigator.pop(context);
-                          },
+                          child: MaterialButton(
+                            onPressed: () async {
+                              await validateForm();
+                            },
                             textColor: Colors.white,
                             minWidth: double.infinity,
-                            child: Text('Register'),),
+                            child: Text('Register'),
+                          ),
                         ),
                       ),
                     ],

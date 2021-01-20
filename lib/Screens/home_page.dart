@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,9 +11,10 @@ import 'package:shopapp/Screens/login.dart';
 
 class HomePage extends StatefulWidget {
 
-  final GoogleSignIn _googleSignIn;
+  final GoogleSignIn googleSignIn;
+  final FirebaseAuth firebaseAuth;
 
-  HomePage(this._googleSignIn);
+  HomePage({this.googleSignIn, this.firebaseAuth});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,16 +25,28 @@ class _HomePageState extends State<HomePage> {
   int levelCounter = 0;
 
   signOutGoogle() async{
-    await widget._googleSignIn.signOut();
+    await widget.googleSignIn.signOut();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));
     Fluttertoast.showToast(msg: 'Signed Out');
   }
+
+  signOut() async{
+    await widget.firebaseAuth.signOut();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    Fluttertoast.showToast(msg: 'Signed Out');
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async{
-        signOutGoogle();
+        if(widget.firebaseAuth != null){
+          signOut();
+        }else if (widget.googleSignIn != null){
+          signOutGoogle();
+        }
         return false;
       },
       child: Scaffold(
@@ -119,7 +133,11 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey,
                 ),
                 onTap: () async{
-                  signOutGoogle();
+                  if(widget.firebaseAuth != null){
+                    signOut();
+                  }else if (widget.googleSignIn != null){
+                    signOutGoogle();
+                  }
                 },
               ),
               DrawerListTile(
