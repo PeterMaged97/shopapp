@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> registerUser() async {
     User firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser == null) {
-      print('12');
+      print('Successful');
       _firebaseAuth
           .createUserWithEmailAndPassword(
               email: _emailEditingController.text,

@@ -15,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  GoogleSignIn _googleSignIn;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GlobalKey _formKey = GlobalKey<FormState>();
   TextEditingController _emailEditingController = TextEditingController();
@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _googleSignIn = GoogleSignIn();
     isSignedIn();
   }
 
@@ -228,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       loading = true;
     });
-
+    //_googleSignIn.signOut();
     preferences = await SharedPreferences.getInstance();
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     GoogleSignInAuthentication googleAuth = await googleUser.authentication;
