@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
     // TODO: implement initState
     super.initState();
     _googleSignIn = GoogleSignIn();
-    isSignedIn();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => isSignedIn());
   }
 
   @override
@@ -213,12 +214,19 @@ class _LoginScreenState extends State<LoginScreen> {
       loading = true;
     });
 
-    preferences = await SharedPreferences.getInstance();
-    isLoggedIn = await _googleSignIn.isSignedIn();
+    User user = _firebaseAuth.currentUser;
+    if(user != null){
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
+
+    // preferences = await SharedPreferences.getInstance();
+    // isLoggedIn = await _googleSignIn.isSignedIn();
 
     if (isLoggedIn) {
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn,)));
+          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn, firebaseAuth: _firebaseAuth,)));
     }
     setState(() {
       loading = false;

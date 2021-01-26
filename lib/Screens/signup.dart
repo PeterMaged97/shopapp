@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -47,18 +48,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     User firebaseUser = _firebaseAuth.currentUser;
     if (firebaseUser == null) {
       print('Successful');
-      _firebaseAuth
-          .createUserWithEmailAndPassword(
-              email: _emailEditingController.text,
-              password: _passwordEditingController.text)
-          .then((firebaseUser) => {
-                _userServices.createUser({
-                  'name': _nameController.text,
-                  'mail': firebaseUser.user.email,
-                  'id': firebaseUser.user.uid,
-                })
-              });
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(firebaseAuth: _firebaseAuth,)));
+      try {
+        UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
+            email: _emailEditingController.text,
+            password: _passwordEditingController.text
+        );
+        _userServices.createUser({
+          'name': _nameController.text,
+          'mail': user.user.email,
+          'id': user.user.uid,
+        });
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(firebaseAuth: _firebaseAuth,)));
+      } catch(signUpError) {
+        //TODO : handle different kinds of sign up errors not just email collisions
+        print(signUpError);
+        Fluttertoast.showToast(msg: 'This email has already been used.', toastLength: Toast.LENGTH_LONG);
+      }
     }else{
       print(firebaseUser.displayName);
       print(firebaseUser.email);

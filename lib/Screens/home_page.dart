@@ -26,15 +26,15 @@ class _HomePageState extends State<HomePage> {
 
   signOutGoogle() async{
     await widget.googleSignIn.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
     Fluttertoast.showToast(msg: 'Signed Out');
   }
 
   signOut() async{
     await widget.firebaseAuth.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
     Fluttertoast.showToast(msg: 'Signed Out');
   }
 
@@ -44,9 +44,12 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async{
         if(widget.firebaseAuth != null){
           signOut();
-        }else if (widget.googleSignIn != null){
+        }
+        if (widget.googleSignIn != null){
           signOutGoogle();
         }
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
         return false;
       },
       child: Scaffold(
@@ -133,11 +136,14 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey,
                 ),
                 onTap: () async{
-                  if(widget.firebaseAuth != null){
+                  if(widget.firebaseAuth != null) {
                     signOut();
-                  }else if (widget.googleSignIn != null){
+                  }
+                  if (widget.googleSignIn != null){
                     signOutGoogle();
                   }
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
               ),
               DrawerListTile(
