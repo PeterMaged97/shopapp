@@ -5,7 +5,6 @@ import 'package:shopapp/Screens/login.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  Firebase.initializeApp();
   runApp(ShopApp());
 }
 

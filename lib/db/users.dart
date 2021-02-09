@@ -1,11 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserServices{
-  FirebaseDatabase _database = FirebaseDatabase.instance;
+  FirebaseFirestore __firestore = FirebaseFirestore.instance;
   String ref =  'users';
 
   createUser(Map user){
-    _database.reference().child(ref).push().set(user).catchError((e) => {print(e)});
+    __firestore.collection(ref).doc(user['userID']).set(user);
   }
 
 }

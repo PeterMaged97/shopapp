@@ -252,12 +252,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       final QuerySnapshot result = await FirebaseFirestore.instance
           .collection('users')
-          .where('id', isEqualTo: user.uid)
+          .where('userID', isEqualTo: user.uid)
           .get();
       final List<DocumentSnapshot> documents = result.docs;
       if (documents.length == 0) {
         FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'id': user.uid,
+          'userID': user.uid,
           'username': user.displayName,
           'profile_picture': user.photoURL,
         });

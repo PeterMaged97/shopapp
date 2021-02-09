@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/Screens/home_page.dart';
+import 'package:shopapp/auth/auth.dart';
 import 'package:shopapp/db/users.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoggedIn = false;
   bool showPassword = false;
   bool showConfirmPassword = false;
+  Auth auth = Auth();
 
   @override
   void initState() {
@@ -56,7 +58,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _userServices.createUser({
           'name': _nameController.text,
           'mail': user.user.email,
-          'id': user.user.uid,
+          'photo': user.user.photoURL,
+          'userID': user.user.uid,
         });
         Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(firebaseAuth: _firebaseAuth,)));
       } catch(signUpError) {
@@ -237,7 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Material(
                           borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.red[800],
+                          color: Colors.deepOrange,
                           child: MaterialButton(
                             onPressed: () async {
                               await validateForm();
@@ -246,6 +249,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             minWidth: double.infinity,
                             child: Text('Register'),
                           ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Material(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.blue[800],
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                  },
+                                  textColor: Colors.white,
+                                  //minWidth: double.infinity,
+                                  child: Text('Facebook'),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 20),
+                            Expanded(
+                              child: Material(
+                                borderRadius: BorderRadius.circular(15.0),
+                                color: Colors.red[800],
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    User user = await auth.googleSignIn();
+                                    if(user == null){
+                                      _userServices.createUser({
+                                        'name': user.displayName,
+                                        'photo': user.photoURL,
+                                        'mail': user.email,
+                                        'userID': user.uid,
+                                      });
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn: auth.googleSingIn,)));
+                                    }
+                                  },
+                                  textColor: Colors.white,
+                                  //minWidth: double.infinity,
+                                  child: Text('Google'),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
