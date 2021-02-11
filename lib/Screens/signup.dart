@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -42,34 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     FormState formState = _formKey.currentState;
     if (formState.validate()) {
       print('valid');
-      await registerUser();
-    }
-  }
-
-  Future<void> registerUser() async {
-    User firebaseUser = _firebaseAuth.currentUser;
-    if (firebaseUser == null) {
-      print('Successful');
-      try {
-        UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(
-            email: _emailEditingController.text,
-            password: _passwordEditingController.text
-        );
-        _userServices.createUser({
-          'name': _nameController.text,
-          'mail': user.user.email,
-          'photo': user.user.photoURL,
-          'userID': user.user.uid,
-        });
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(firebaseAuth: _firebaseAuth,)));
-      } catch(signUpError) {
-        //TODO : handle different kinds of sign up errors not just email collisions
-        print(signUpError);
-        Fluttertoast.showToast(msg: 'This email has already been used.', toastLength: Toast.LENGTH_LONG);
-      }
-    }else{
-      print(firebaseUser.displayName);
-      print(firebaseUser.email);
+      //await registerUser();
     }
   }
 
@@ -98,20 +72,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Flexible(
-                child: Hero(
-                  tag: 'logo',
-                  child: Container(
-                    //alignment: Alignment.topCenter,
-                    child: Image.asset('images/lg.png',
-                        //width: 250,
-                        height: 100,
-                        fit: BoxFit.cover),
-                  ),
-                ),
-              ),
-
-              //SizedBox(height: 100,),
               Container(
                 //alignment: Alignment.center,
                 child: Form(
@@ -253,46 +213,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Material(
-                                borderRadius: BorderRadius.circular(15.0),
-                                color: Colors.blue[800],
-                                child: MaterialButton(
-                                  onPressed: () async {
-                                  },
-                                  textColor: Colors.white,
-                                  //minWidth: double.infinity,
-                                  child: Text('Facebook'),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: Material(
-                                borderRadius: BorderRadius.circular(15.0),
-                                color: Colors.red[800],
-                                child: MaterialButton(
-                                  onPressed: () async {
-                                    User user = await auth.googleSignIn();
-                                    if(user == null){
-                                      _userServices.createUser({
-                                        'name': user.displayName,
-                                        'photo': user.photoURL,
-                                        'mail': user.email,
-                                        'userID': user.uid,
-                                      });
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(googleSignIn: auth.googleSingIn,)));
-                                    }
-                                  },
-                                  textColor: Colors.white,
-                                  //minWidth: double.infinity,
-                                  child: Text('Google'),
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: RichText(
+                          text: TextSpan(
+                            text: 'Already have an account? ',
+                            children: [
+                              TextSpan(text: 'Sign In', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), recognizer: TapGestureRecognizer()..onTap = () {
+                                Navigator.pop(context);
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Material(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.red[800],
+                          child: MaterialButton(
+                            onPressed: () {},
+                            textColor: Colors.white,
+                            //minWidth: double.infinity,
+                            child: Text('Sign up using Google'),
+                          ),
                         ),
                       ),
                     ],

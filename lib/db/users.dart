@@ -5,8 +5,8 @@ class UserServices{
   FirebaseFirestore __firestore = FirebaseFirestore.instance;
   String ref =  'users';
 
-  createUser(Map user){
-    __firestore.collection(ref).doc(user['userID']).set(user);
+  createUser(Map<String, dynamic> user){
+    __firestore.collection(ref).doc().set(user);
   }
 
 }

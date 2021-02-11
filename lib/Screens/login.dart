@@ -29,9 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _googleSignIn = GoogleSignIn();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => isSignedIn());
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) => isSignedIn());
   }
 
   @override
@@ -181,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(15.0),
                         color: Colors.red,
                         child: MaterialButton(
-                          onPressed: signInWithGoogle,
+                          onPressed: (){},
                           textColor: Colors.white,
                           minWidth: double.infinity,
                           child: Text('Google'),),
@@ -207,77 +206,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
-  }
-
-  void isSignedIn() async {
-    setState(() {
-      loading = true;
-    });
-
-    User user = _firebaseAuth.currentUser;
-    if(user != null){
-      setState(() {
-        isLoggedIn = true;
-      });
-    }
-
-    // preferences = await SharedPreferences.getInstance();
-    // isLoggedIn = await _googleSignIn.isSignedIn();
-
-    if (isLoggedIn) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn, firebaseAuth: _firebaseAuth,)));
-    }
-    setState(() {
-      loading = false;
-    });
-  }
-
-  Future signInWithGoogle() async {
-    setState(() {
-      loading = true;
-    });
-    //_googleSignIn.signOut();
-    preferences = await SharedPreferences.getInstance();
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final UserCredential authResult =
-        await _firebaseAuth.signInWithCredential(credential);
-    final User user = authResult.user;
-
-    if (user != null) {
-      final QuerySnapshot result = await FirebaseFirestore.instance
-          .collection('users')
-          .where('userID', isEqualTo: user.uid)
-          .get();
-      final List<DocumentSnapshot> documents = result.docs;
-      if (documents.length == 0) {
-        FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-          'userID': user.uid,
-          'username': user.displayName,
-          'profile_picture': user.photoURL,
-        });
-        await preferences.setString('id', user.uid);
-        await preferences.setString('username', user.displayName);
-        await preferences.setString('profile_picture', user.photoURL);
-      } else {
-        await preferences.setString('id', documents[0]['id']);
-        await preferences.setString('username', documents[0]['username']);
-        await preferences.setString(
-            'profile_picture', documents[0]['profile_picture']);
-      }
-      Fluttertoast.showToast(msg: 'Welcome ${user.displayName}');
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(googleSignIn: _googleSignIn)));
-    } else {
-      Fluttertoast.showToast(msg: "Login failed");
-    }
-    setState(() {
-      loading = false;
-    });
   }
 }
