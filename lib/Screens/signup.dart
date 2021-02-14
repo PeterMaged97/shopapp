@@ -7,10 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/Screens/home_page.dart';
+import 'package:shopapp/Screens/loading.dart';
+import 'package:shopapp/Screens/login.dart';
 import 'package:shopapp/auth/auth.dart';
 import 'package:shopapp/db/users.dart';
+import 'package:shopapp/provider/user_provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -20,7 +24,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   UserServices _userServices = UserServices();
   TextEditingController _emailEditingController = TextEditingController();
   TextEditingController _passwordEditingController = TextEditingController();
@@ -49,8 +54,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
     return Scaffold(
-      body: Stack(
+      key: _key,
+      body: user.status == Status.Authenticating ? Loading() : Stack(
         children: <Widget>[
           Hero(
             tag: 'bg',
@@ -202,8 +209,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           borderRadius: BorderRadius.circular(15.0),
                           color: Colors.deepOrange,
                           child: MaterialButton(
-                            onPressed: () async {
-                              await validateForm();
+                            onPressed: ()async{
+                              if(_formKey.currentState.validate()){
+                                if(!await user.signUp(_nameController.text, _emailEditingController.text, _passwordEditingController.text)){
+                                  _key.currentState.showSnackBar(SnackBar(content: Text('Sign up failed'),));
+                                }
+                              }
                             },
                             textColor: Colors.white,
                             minWidth: double.infinity,
@@ -218,7 +229,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             text: 'Already have an account? ',
                             children: [
                               TextSpan(text: 'Sign In', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red), recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.pop(context);
+                                Provider.of<UserProvider>(context, listen: false).setUninitialized();
                               }),
                             ],
                           ),

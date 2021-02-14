@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:shopapp/Components/drawer_list_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:shopapp/Components/horizontal_listview.dart';
 import 'package:shopapp/Components/product_grid.dart';
 import 'package:shopapp/Screens/cart.dart';
 import 'package:shopapp/Screens/login.dart';
+import 'package:shopapp/provider/user_provider.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -40,6 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
     return WillPopScope(
       onWillPop: () async{
         if(widget.firebaseAuth != null){
@@ -136,14 +139,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey,
                 ),
                 onTap: () async{
-                  if(widget.firebaseAuth != null) {
-                    signOut();
-                  }
-                  if (widget.googleSignIn != null){
-                    signOutGoogle();
-                  }
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                  user.signOut();
                 },
               ),
               DrawerListTile(
