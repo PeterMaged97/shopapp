@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/models/user.dart';
 import 'package:shopapp/services/user_service.dart';
 
 enum Status {Uninitialized, Authenticated, Authenticating, Unauthenticated, Unregistered}
@@ -9,9 +10,14 @@ class UserProvider with ChangeNotifier{
   FirebaseAuth auth = FirebaseAuth.instance;
   UserCredential _userCredential;
   Status _status = Status.Uninitialized;
+  UserServices _userServices = UserServices();
+  UserModel _userModel;
+
+  //Getters
+  UserModel get userModel => _userModel;
   Status get status => _status;
   UserCredential get userCredential => _userCredential;
-  UserServices userServices = UserServices();
+  UserServices get userServices => _userServices;
 
   UserProvider.initialize(): auth = FirebaseAuth.instance{
     auth.authStateChanges().listen((_onStateChanged) { });
@@ -79,6 +85,7 @@ class UserProvider with ChangeNotifier{
       _status = Status.Unauthenticated;
     }else{
       _userCredential = uc;
+      _userModel = await _userServices.getUserById(user.uid);
       _status = Status.Authenticated;
     }
     notifyListeners();

@@ -5,7 +5,7 @@ import 'package:shopapp/Screens/home_page.dart';
 import 'package:shopapp/Screens/login.dart';
 import 'package:shopapp/Screens/loading.dart';
 import 'package:shopapp/Screens/signup.dart';
-import 'package:shopapp/provider/app_provider.dart';
+import 'package:shopapp/provider/product_provider.dart';
 import 'package:shopapp/provider/user_provider.dart';
 
 void main() async{
@@ -20,7 +20,7 @@ class ShopApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider.initialize(),),
-        ChangeNotifierProvider(create: (context) => AppProvider())
+        ChangeNotifierProvider(create: (context) => ProductProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

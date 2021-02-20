@@ -14,4 +14,30 @@ class ProductsService{
     });
   }
 
+  Future<List<Product>> getProducts(){
+    return _firestore.collection(collection).get().then((snaps) {
+      List<Product> products = [];
+      snaps.docs.map((snapshot) => products.add(Product.fromSnapshot(snapshot)));
+      return products;
+    });
+  }
+
+  Future<List<Product>> searchProducts(String productName){
+
+    String searchKey = productName[0].toUpperCase() + productName.substring(1);
+    return _firestore
+        .collection(collection)
+        .orderBy('name')
+        .startAt([searchKey])
+        .endAt([searchKey + '\uf8ff'])
+        .get()
+        .then((result) {
+          List<Product> products = [];
+          for(DocumentSnapshot product in result.docs){
+            products.add(Product.fromSnapshot(product));
+          }
+          return products;
+    });
+  }
+
 }
