@@ -4,7 +4,7 @@ class Product{
   static const String kBrand = 'brand';
   static const String kCategory = 'category';
   static const String kFeatured = 'featured';
-  static const String kImages = 'images';
+  static const String kImageURL = 'images';
   static const String kName = 'name';
   static const String konSale = 'on sale';
   static const String kPrice = 'price';
@@ -16,7 +16,7 @@ class Product{
   String _category;
   bool _featured;
   bool _onSale;
-  List<String> _images;
+  String _imageURL;
   List<String> _sizes;
   int _quantity;
   double _price;
@@ -27,7 +27,7 @@ class Product{
   String get category => _category;
   bool get featured => _featured;
   bool get onSale => _onSale;
-  List<String> get images => _images;
+  String get image => _imageURL;
   List<String> get sizes => _sizes;
   int get quantity => _quantity;
   double get price => _price;
@@ -39,7 +39,7 @@ class Product{
     _brand = snapshot.data()[kBrand];
     _category = snapshot.data()[kCategory];
     _onSale = snapshot.data()[konSale];
-    _images = snapshot.data()[kImages];
+    _imageURL = snapshot.data()[kImageURL];
     _sizes = snapshot.data()[kSizes];
     _quantity = snapshot.data()[kQuantity];
     _price = snapshot.data()[kPrice];

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shopapp/db/users.dart';
+import 'package:shopapp/services/user_service.dart';
 
 enum Status {Uninitialized, Authenticated, Authenticating, Unauthenticated, Unregistered}
 

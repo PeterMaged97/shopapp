@@ -5,6 +5,7 @@ import 'package:shopapp/Screens/home_page.dart';
 import 'package:shopapp/Screens/login.dart';
 import 'package:shopapp/Screens/loading.dart';
 import 'package:shopapp/Screens/signup.dart';
+import 'package:shopapp/provider/app_provider.dart';
 import 'package:shopapp/provider/user_provider.dart';
 
 void main() async{
@@ -16,9 +17,11 @@ void main() async{
 class ShopApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      //builder: (_) => UserProvider.initialize(),
-      create: (context) => UserProvider.initialize(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider.initialize(),),
+        ChangeNotifierProvider(create: (context) => AppProvider())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

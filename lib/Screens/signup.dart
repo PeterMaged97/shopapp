@@ -13,7 +13,7 @@ import 'package:shopapp/Screens/home_page.dart';
 import 'package:shopapp/Screens/loading.dart';
 import 'package:shopapp/Screens/login.dart';
 import 'package:shopapp/auth/auth.dart';
-import 'package:shopapp/db/users.dart';
+import 'package:shopapp/services/user_service.dart';
 import 'package:shopapp/provider/user_provider.dart';
 
 class SignUpScreen extends StatefulWidget {
