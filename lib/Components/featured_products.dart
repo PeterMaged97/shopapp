@@ -5,6 +5,11 @@ import 'package:shopapp/provider/product_provider.dart';
 import 'featured_card.dart';
 
 class FeaturedProducts extends StatefulWidget {
+
+  final int levelCounter;
+
+  const FeaturedProducts({Key key, this.levelCounter}) : super(key: key);
+
   @override
   _FeaturedProductsState createState() => _FeaturedProductsState();
 }
@@ -22,6 +27,7 @@ class _FeaturedProductsState extends State<FeaturedProducts> {
             itemBuilder: (_, index) {
               return FeaturedCard(
                 product: productProvider.featuredProducts[index],
+                levelCounter: widget.levelCounter,
               );
             }));
   }

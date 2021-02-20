@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 200,
               //
-              child: FeaturedProducts(),
+              child: FeaturedProducts(levelCounter: levelCounter),
             ),
             // Padding(
             //   padding: EdgeInsets.all(8.0),
