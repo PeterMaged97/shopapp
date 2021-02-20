@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/Components/order_details_button.dart';
 import 'package:shopapp/Components/product_grid.dart';
+import 'package:shopapp/models/product.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  final String productName;
-  final String productPicture;
-  final int productOldPrice;
-  final int productNewPrice;
+  final Product product;
   final int levelCounter;
 
   ProductDetailsPage(
       {this.levelCounter,
-      this.productName,
-      this.productPicture,
-      this.productOldPrice,
-      this.productNewPrice});
+      this.product});
 
   @override
   _ProductDetailsPageState createState() => _ProductDetailsPageState();
@@ -53,8 +48,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: GridTile(
               child: Container(
                 child: Hero(
-                    tag: '${widget.productName}${widget.levelCounter-1}',
-                    child: Image.asset(widget.productPicture)),
+                    tag: '${widget.product.name}${widget.levelCounter-1}',
+                    child: Image.network(widget.product.image)),
               ),
               footer: Container(
                   alignment: Alignment.center,
@@ -63,13 +58,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(widget.productName,
+                      Text(widget.product.name,
                           style: TextStyle(color: Colors.white)),
-                      Text('\$${widget.productOldPrice}',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              decoration: TextDecoration.lineThrough)),
-                      Text('\$${widget.productNewPrice}',
+                      Text('\$${widget.product.price}',
                           style: TextStyle(color: Colors.white)),
                     ],
                   )),
@@ -142,7 +133,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     style: TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    widget.productName,
+                    widget.product.name,
                   ),
                 ],
               ),
@@ -159,11 +150,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Similar Products'),
-          ),
-          ProductGrid(widget.levelCounter),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Text('Similar Products'),
+          // ),
+          //ProductGrid(widget.levelCounter),
         ],
       ),
     );

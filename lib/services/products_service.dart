@@ -7,17 +7,28 @@ class ProductsService{
   String collection = 'products';
 
   Future<List<Product>> getFeaturedProducts(){
-    return _firestore.collection(collection).where('featured', isEqualTo: 'true').get().then((snaps) {
+    return _firestore.collection(collection).where('featured', isEqualTo: true).get().then((snaps) {
       List<Product> featuredProducts = [];
-      snaps.docs.map((snapshot) => featuredProducts.add(Product.fromSnapshot(snapshot)));
+      //snaps.docs.map((snapshot) => featuredProducts.add(Product.fromSnapshot(snapshot)));
+      for (QueryDocumentSnapshot product in snaps.docs){
+        Product p = Product.fromSnapshot(product);
+        featuredProducts.add(p);
+      }
+      print(featuredProducts);
       return featuredProducts;
     });
   }
 
   Future<List<Product>> getProducts(){
+    print('getting products');
     return _firestore.collection(collection).get().then((snaps) {
       List<Product> products = [];
+      for (QueryDocumentSnapshot product in snaps.docs){
+        Product p = Product.fromSnapshot(product);
+        products.add(p);
+      }
       snaps.docs.map((snapshot) => products.add(Product.fromSnapshot(snapshot)));
+      print(products);
       return products;
     });
   }

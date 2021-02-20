@@ -46,7 +46,8 @@ class ScreenController extends StatelessWidget {
         break;
       case Status.Uninitialized:
       case Status.Unauthenticated:
-        return LoginScreen();
+        //ToDo: change this back to login screen after testing
+        return HomePage();
         break;
       case Status.Authenticating:
         return Loading();

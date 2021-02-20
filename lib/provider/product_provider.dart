@@ -11,6 +11,7 @@ class ProductProvider with ChangeNotifier{
 
   ProductProvider(){
     loadProducts();
+    getFeaturedProducts();
   }
 
   void getFeaturedProducts() async {

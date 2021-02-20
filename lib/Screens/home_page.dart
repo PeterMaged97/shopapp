@@ -5,14 +5,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/Components/drawer_list_tile.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:shopapp/Components/featured_products.dart';
 import 'package:shopapp/Components/horizontal_listview.dart';
+import 'package:shopapp/Components/product_card.dart';
 import 'package:shopapp/Components/product_grid.dart';
 import 'package:shopapp/Screens/cart.dart';
 import 'package:shopapp/Screens/login.dart';
+import 'package:shopapp/provider/product_provider.dart';
 import 'package:shopapp/provider/user_provider.dart';
 
 class HomePage extends StatefulWidget {
-
   final GoogleSignIn googleSignIn;
   final FirebaseAuth firebaseAuth;
 
@@ -23,17 +25,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   int levelCounter = 0;
 
-  signOutGoogle() async{
+  signOutGoogle() async {
     await widget.googleSignIn.signOut();
     // Navigator.pushReplacement(
     //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
     Fluttertoast.showToast(msg: 'Signed Out');
   }
 
-  signOut() async{
+  signOut() async {
     await widget.firebaseAuth.signOut();
     // Navigator.pushReplacement(
     //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -41,14 +42,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+
     return WillPopScope(
-      onWillPop: () async{
-        if(widget.firebaseAuth != null){
+      onWillPop: () async {
+        if (widget.firebaseAuth != null) {
           signOut();
         }
-        if (widget.googleSignIn != null){
+        if (widget.googleSignIn != null) {
           signOutGoogle();
         }
         Navigator.pushReplacement(
@@ -70,7 +78,8 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.shopping_cart, color: Colors.white),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Cart()));
               },
             ),
           ],
@@ -112,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.red,
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Cart()));
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Cart()));
                 },
               ),
               DrawerListTile(
@@ -138,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.logout,
                   color: Colors.grey,
                 ),
-                onTap: () async{
+                onTap: () async {
                   user.signOut();
                 },
               ),
@@ -164,39 +174,32 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           children: [
             SizedBox(
-              height:200,
-              child: Carousel(
-                dotBgColor: Colors.transparent,
-                boxFit: BoxFit.cover,
-                autoplay: false,
-                animationCurve: Curves.fastOutSlowIn,
-                animationDuration: Duration(seconds: 1),
-                dotSize: 4.0,
-                dotColor: Colors.red[900],
-                dotIncreasedColor: Colors.red,
-                images: [
-                  AssetImage('images/c1.jpg'),
-                  AssetImage('images/IMG_1266.JPG'),
-                  AssetImage('images/m1.jpeg'),
-                  AssetImage('images/m2.jpg'),
-                  AssetImage('images/w1.jpeg'),
-                  AssetImage('images/w3.jpeg'),
-                  AssetImage('images/w4.jpeg'),
-                ],
-              ),
+              height: 200,
+              //
+              child: FeaturedProducts(),
             ),
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Categories'),
-            ),
-            HorizontalList(),
-            Divider(),
+            // Padding(
+            //   padding: EdgeInsets.all(8.0),
+            //   child: Text('Categories'),
+            // ),
+            //HorizontalList(),
+            //Divider(),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text('Recent Products'),
             ),
-            Flexible(flex: 3,
-                child: ProductGrid(levelCounter)),
+            // Column(
+            //   children: productProvider
+            //       .products
+            //       .map((item) => GestureDetector(
+            //             child: ProductCard(
+            //               levelCounter: levelCounter,
+            //               product: item,
+            //             ),
+            //           ))
+            //       .toList(),
+            // ),
+            ProductGrid(levelCounter, productProvider.products),
           ],
         ),
       ),
