@@ -40,9 +40,7 @@ class Product{
     _category = snapshot.data()[kCategory];
     _onSale = snapshot.data()[konSale];
     _imageURL = snapshot.data()[kImageURL];
-    print('done 111');
     _sizes = snapshot.data()[kSizes];
-    print('done 222');
     _quantity = snapshot.data()[kQuantity];
     _price = snapshot.data()[kPrice];
     _name = snapshot.data()[kName];

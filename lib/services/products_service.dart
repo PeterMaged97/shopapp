@@ -14,13 +14,11 @@ class ProductsService{
         Product p = Product.fromSnapshot(product);
         featuredProducts.add(p);
       }
-      print(featuredProducts);
       return featuredProducts;
     });
   }
 
   Future<List<Product>> getProducts(){
-    print('getting products');
     return _firestore.collection(collection).get().then((snaps) {
       List<Product> products = [];
       for (QueryDocumentSnapshot product in snaps.docs){
@@ -28,7 +26,6 @@ class ProductsService{
         products.add(p);
       }
       snaps.docs.map((snapshot) => products.add(Product.fromSnapshot(snapshot)));
-      print(products);
       return products;
     });
   }
